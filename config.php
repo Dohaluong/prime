@@ -24,12 +24,17 @@ function prime_env(string $key, string $default = ''): string {
 function prime_base_path(): string {
     static $base = null;
     if ($base === null) {
+        $configured = rtrim(prime_env('BASE_URL', ''), '/');
+        if ($configured !== '') return $base = $configured;
         $docRoot = realpath($_SERVER['DOCUMENT_ROOT'] ?? '');
         $projectRoot = realpath(__DIR__);
         if ($docRoot && $projectRoot && str_starts_with($projectRoot, $docRoot)) {
             $base = str_replace('\\', '/', substr($projectRoot, strlen($docRoot)));
         } else {
-            $base = '';
+            // Fallback for shared hosting/symlink deployments where the
+            // filesystem root is outside DOCUMENT_ROOT.
+            $requestDir = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '')), '/');
+            $base = preg_replace('#/admin$#', '', $requestDir) ?: '';
         }
     }
     return $base;
