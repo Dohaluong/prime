@@ -12,6 +12,7 @@ header_page('Sản phẩm | IMA PRIME');
 <main class="catalog-page">
 <div class="container crumb"><a href="index.php">Trang chủ</a> / <span>Sản phẩm</span></div>
 <section class="container catalog-hero"><div><div class="eyebrow">Danh mục</div><h1>Sản phẩm</h1></div><p>Toàn bộ sofa giường mở điện, sofa chỉnh điện và sofa modular đang bán. Mẫu có nhãn xanh là bán thành phẩm dựng sẵn tại xưởng, giao trong 2-3 ngày.</p></section>
+<button class="catalog-mobile-filter" type="button" data-catalog-filter-open><i class="bi bi-sliders"></i> Bộ lọc <span data-catalog-mobile-count></span></button>
 <div class="container catalog-layout">
 <aside class="catalog-filter">
 <div class="filter-head"><span class="eyebrow">Bộ lọc</span><button type="button" data-catalog-reset hidden>Xoá bộ lọc</button></div>
@@ -20,6 +21,7 @@ header_page('Sản phẩm | IMA PRIME');
 <div class="filter-group"><span>Mức giá</span><?php foreach($priceBands as $band): ?><button class="<?=$band['key']==='all'?'active':''?>" data-catalog-price="<?=$band['key']?>" data-price-min="<?=$band['min']?>" data-price-max="<?=$band['max']===PHP_INT_MAX?'':$band['max']?>"><?=$band['label']?> <i><?=count(array_filter($all,fn($p)=>$p['price']>=$band['min']&&$p['price']<$band['max']))?></i></button><?php endforeach; ?></div>
 <div class="filter-group"><span>Màu vải</span><div class="catalog-color-list" aria-label="Màu vải cơ bản"><button type="button" class="catalog-color-swatch" style="--swatch:#829a92" title="Xanh sage"></button><button type="button" class="catalog-color-swatch" style="--swatch:#b77973" title="Đỏ đất"></button><button type="button" class="catalog-color-swatch" style="--swatch:#8b829b" title="Tím khói"></button><button type="button" class="catalog-color-swatch" style="--swatch:#c6ae71" title="Vàng mù tạt"></button><button type="button" class="catalog-color-swatch" style="--swatch:#a79585" title="Be nâu"></button><button type="button" class="catalog-color-swatch" style="--swatch:#75848a" title="Xanh xám"></button></div><a href="fabric-library.php">Xem thư viện vải →</a></div>
 <div class="filter-group"><span>Sắp xếp</span><select data-catalog-sort><option value="featured">Phổ biến nhất</option><option value="low">Giá thấp đến cao</option><option value="high">Giá cao đến thấp</option><option value="rating">Đánh giá cao nhất</option></select></div>
+<button class="catalog-filter-apply" type="button" data-catalog-filter-apply>Áp dụng</button>
 </aside>
 <section>
 <div class="catalog-count"><span data-catalog-count><?=count($all)?> mẫu</span><div class="catalog-tags" data-catalog-tags hidden></div></div>
