@@ -14,7 +14,7 @@ function about_upload(string $field): ?string {
     if (!is_dir($dir) && !mkdir($dir, 0755, true)) return null;
     $name = bin2hex(random_bytes(16)).'.'.$ok[$mime];
     if (!move_uploaded_file($tmp, $dir.'/'.$name)) return null;
-    return '/Prime-2/uploads/about/'.$name;
+    return prime_base_path().'/uploads/about/'.$name;
 }
 
 try {

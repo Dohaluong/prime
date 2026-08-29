@@ -21,6 +21,20 @@ function prime_env(string $key, string $default = ''): string {
     return $vars[$key] ?? $default;
 }
 
+function prime_base_path(): string {
+    static $base = null;
+    if ($base === null) {
+        $docRoot = realpath($_SERVER['DOCUMENT_ROOT'] ?? '');
+        $projectRoot = realpath(__DIR__);
+        if ($docRoot && $projectRoot && str_starts_with($projectRoot, $docRoot)) {
+            $base = str_replace('\\', '/', substr($projectRoot, strlen($docRoot)));
+        } else {
+            $base = '';
+        }
+    }
+    return $base;
+}
+
 function db(): ?PDO {
     static $pdo = false;
     if ($pdo !== false) return $pdo;
