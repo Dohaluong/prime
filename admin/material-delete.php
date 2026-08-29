@@ -1,0 +1,1 @@
+<?php require_once 'auth.php';require_admin();$pdo=db();if($_SERVER['REQUEST_METHOD']==='POST'&&$pdo&&!empty($_POST['id']))try{$pdo->prepare('DELETE FROM materials WHERE id=?')->execute([(int)$_POST['id']]);header('Location: materials.php?ok=Đã xoá chất liệu');exit;}catch(Throwable $e){}header('Location: materials.php?error=Không thể xoá chất liệu');

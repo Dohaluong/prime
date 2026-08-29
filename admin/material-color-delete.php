@@ -1,0 +1,1 @@
+<?php require_once 'auth.php';require_admin();$pdo=db();$id=(int)($_POST['id']??0);$materialId=(int)($_POST['material_id']??0);if($pdo&&$id)try{$pdo->prepare('DELETE FROM material_colors WHERE id=? AND material_id=?')->execute([$id,$materialId]);}catch(Throwable $e){}header('Location: material-form.php?id='.$materialId.'&ok=Đã xoá màu');

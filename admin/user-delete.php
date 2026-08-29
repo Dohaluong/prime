@@ -1,0 +1,1 @@
+<?php require_once 'auth.php'; require_admin(); $pdo=db(); $id=(int)($_POST['id']??0); if($_SERVER['REQUEST_METHOD']==='POST'&&$pdo&&$id&&$id!==(int)current_admin()['id'])try{$pdo->prepare('DELETE FROM users WHERE id=?')->execute([$id]);header('Location: users.php?ok=Đã xoá người dùng');exit;}catch(Throwable $e){}header('Location: users.php?error=Không thể xoá người dùng');

@@ -1,0 +1,2 @@
+<?php
+require_once 'auth.php';require_admin();$pdo=db();$kind=$_POST['kind']??'';$tables=['category'=>'categories','collection'=>'collections'];$list=$kind==='category'?'categories.php':'collections.php';if($_SERVER['REQUEST_METHOD']==='POST'&&$pdo&&isset($tables[$kind])&&!empty($_POST['id']))try{$pdo->prepare('DELETE FROM '.$tables[$kind].' WHERE id=?')->execute([(int)$_POST['id']]);header('Location: '.$list.'?ok=Đã xoá mục');exit;}catch(Throwable $e){}header('Location: '.$list.'?error=Không thể xoá mục');
