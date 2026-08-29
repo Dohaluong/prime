@@ -42,6 +42,8 @@ document.querySelectorAll('.gallery').forEach((gallery, number) => {
     const createSlide = (thumbnail=false) => { const slide=document.createElement('div');slide.className='swiper-slide';const button=document.createElement('button');button.type='button';button.className=thumbnail?'gallery-thumb':'gallery-main-lightbox';button.dataset[thumbnail?'slideIndex':'lightboxIndex']=String(thumbnail ? materialSlideIndex : i);const image=document.createElement('img');image.src=src;image.alt='Ảnh vật liệu';image.loading='eager';button.append(image);slide.append(button);return slide; };
     mainSwiper.wrapperEl.append(createSlide()); thumbSwiper.wrapperEl.append(createSlide(true));
     mainSwiper.update(); thumbSwiper.update(); if(lightbox)lightbox.props.sources=images;
-    requestAnimationFrame(()=>mainSwiper.slideTo(i,0));
+    // `i` is the image-array index and differs from the slide index whenever
+    // the video sits after the first two images. Go to the newly reserved slot.
+    requestAnimationFrame(()=>mainSwiper.slideTo(materialSlideIndex,0));
   };
 });

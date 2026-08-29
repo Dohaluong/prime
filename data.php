@@ -25,7 +25,12 @@ function product_variant_data(int $productId): array {
     try {
       $q=$pdo->prepare('SELECT id,name FROM product_size_options WHERE product_id=? ORDER BY sort_order,id');$q->execute([$productId]);$sizes=$q->fetchAll(PDO::FETCH_ASSOC);
       $q=$pdo->prepare('SELECT m.id,m.name,m.coefficient,r.color_ids_json FROM product_variant_materials r JOIN materials m ON m.id=r.material_id WHERE r.product_id=? ORDER BY m.name');$q->execute([$productId]);$materials=$q->fetchAll(PDO::FETCH_ASSOC);
-      if(!$sizes || !$materials) return $fallback;
+      // Older/newly-created products may not have their matrix saved yet. Use
+      // the first real material (and its real colour images), never a fake
+      // material id, so choosing a colour can still update the gallery.
+      if(!$materials){$materials=$pdo->query('SELECT id,name,coefficient,NULL AS color_ids_json FROM materials ORDER BY id LIMIT 1')->fetchAll(PDO::FETCH_ASSOC);}
+      if(!$materials) return $fallback;
+      if(!$sizes) $sizes=$fallback['sizes'];
       $ids=implode(',',array_map('intval',array_column($materials,'id')));$colors=$pdo->query("SELECT id,material_id,code,image,hex_code FROM material_colors WHERE material_id IN ($ids) ORDER BY id")->fetchAll(PDO::FETCH_ASSOC);foreach($colors as &$color)$color['image']=prime_asset_url($color['image']??'');unset($color);foreach($materials as &$material){$raw=$material['color_ids_json'];if($raw!==null){$selected=array_map('intval',json_decode($raw,true)?:[]);$colors=array_values(array_filter($colors,fn($color)=>$color['material_id']!=$material['id']||in_array((int)$color['id'],$selected,true)));}$material['has_color_rule']=$raw!==null;unset($material['color_ids_json']);}unset($material);
       $q=$pdo->prepare('SELECT material_id,size_option_id,price FROM product_variant_prices WHERE product_id=?');$q->execute([$productId]);$prices=[];foreach($q->fetchAll(PDO::FETCH_ASSOC) as $row)$prices[$row['material_id'].'_'.$row['size_option_id']]=(float)$row['price'];
       return compact('sizes','materials','colors','prices');
