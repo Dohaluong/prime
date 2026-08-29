@@ -75,6 +75,12 @@
   .product-accessories .product-text p,.home-bestsellers .product-text p{font-size:12px;line-height:1.45;margin:5px 0 8px}
 }
 
+/* Catalogue availability label */
+.catalog-image .badge{top:9px;right:9px;left:auto}
+
+.customer-review .review-author{display:flex;flex-direction:column;align-items:flex-start;gap:7px}.customer-review .review-author .stars{margin:0}.review-success-dialog{position:relative;width:min(480px,calc(100% - 32px));border:1px solid #d9cfbf;background:var(--paper);padding:42px 34px;text-align:center;color:var(--ink)}.review-success-dialog::backdrop{background:rgba(20,17,12,.55)}.review-success-dialog>i{display:block;color:var(--green);font-size:38px;margin-bottom:16px}.review-success-dialog h2{font:400 34px 'Newsreader',serif;margin:11px 0}.review-success-dialog p{margin:0 auto 25px;max-width:350px;line-height:1.7;color:var(--muted)}.review-success-dialog .button{border:0}.review-success-dialog .review-close:first-child{position:absolute;right:14px;top:12px}
+.review-images a{display:block;width:112px;height:112px;cursor:zoom-in}.review-pagination{display:flex;justify-content:center;gap:7px;margin-top:30px}.review-pagination a{display:grid;place-items:center;min-width:35px;height:35px;border:1px solid #d9cfbf;color:var(--ink);font-size:12px;text-decoration:none}.review-pagination a:hover,.review-pagination a.active{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+
 /* Keep the large product image filled; thumbnails keep their own cover rules. */
 .gallery .main-photo .gallery-main-lightbox img,
 .gallery .main-photo > .main-gallery-open > img,
