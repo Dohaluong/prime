@@ -14,6 +14,16 @@ $defaultColors = [
   ['code'=>'Than chì','hex_code'=>'#3E3B34'],
 ];
 $accessories = array_slice(array_values(array_filter(products(), fn($item) => ($item['slug'] ?? '') !== ($p['slug'] ?? ''))), 0, 3);
+
+/** Use YouTube's privacy-enhanced embed with the smallest practical player UI. */
+function prime_video_embed_url(string $url): string {
+  $cleanUrl = html_entity_decode(trim($url));
+  if (preg_match('~(?:youtu\.be/|youtube(?:-nocookie)?\.com/(?:embed/|shorts/|watch\?(?:[^#]*&)?v=))([A-Za-z0-9_-]{6,})~i', $cleanUrl, $match)) {
+    return 'https://www.youtube-nocookie.com/embed/'.$match[1].'?controls=1&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&disablekb=1&fs=0';
+  }
+  return $cleanUrl;
+}
+$videoEmbedUrl = prime_video_embed_url($p['video_url'] ?? 'https://www.youtube.com/watch?v=vO7mYgL7XvY');
 header_page($p['name'].' | IMA PRIME');
 ?>
 <main>
@@ -22,9 +32,9 @@ header_page($p['name'].' | IMA PRIME');
     <div class="gallery">
       <div class="main-photo"><img src="<?= htmlspecialchars($media[0]) ?>" alt="<?= htmlspecialchars($p['name']) ?>"></div>
       <?php if (!empty($p['video_url'])): ?>
-        <div class="demo video-embed"><iframe src="<?= htmlspecialchars($p['video_url']) ?>" title="Video <?= htmlspecialchars($p['name']) ?>" allowfullscreen></iframe></div>
+        <div class="demo video-embed"><iframe src="<?= htmlspecialchars($videoEmbedUrl) ?>" title="Video <?= htmlspecialchars($p['name']) ?>" allow="autoplay; encrypted-media; picture-in-picture"></iframe></div>
       <?php else: ?>
-        <div class="demo video-embed"><iframe src="https://www.youtube-nocookie.com/embed/vO7mYgL7XvY?controls=1&amp;modestbranding=1&amp;rel=0&amp;iv_load_policy=3&amp;playsinline=1" title="Video demo cơ chế sofa điện" allowfullscreen></iframe></div>
+        <div class="demo video-embed"><iframe src="<?= htmlspecialchars($videoEmbedUrl) ?>" title="Video demo cơ chế sofa điện" allow="autoplay; encrypted-media; picture-in-picture"></iframe></div>
       <?php endif; ?>
       <div class="thumbs"><?php foreach ($media as $photo): ?><img src="<?= htmlspecialchars($photo) ?>" alt="<?= htmlspecialchars($p['name']) ?>"><?php endforeach; ?></div>
       <article class="gallery-detail"><div class="eyebrow">Về sản phẩm</div><h2><?= htmlspecialchars($p['name']) ?></h2><?php if ($detailedDescription): ?><div class="detailed-description"><?= $detailedDescription ?></div><?php else: ?><p><?= nl2br(htmlspecialchars($p['description'])) ?></p><?php endif; ?></article>

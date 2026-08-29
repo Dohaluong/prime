@@ -64,3 +64,9 @@
 @media(max-width:760px){.catalog-layout>.catalog-filter{box-shadow:none!important}}
 .catalog-image .catalog-secondary-image{position:absolute;inset:0;opacity:0;transition:opacity .35s ease}.catalog-card:hover .catalog-secondary-image{opacity:1}.catalog-image .catalog-primary-image{transition:opacity .35s ease}.catalog-card:hover .catalog-primary-image:has(+.catalog-secondary-image){opacity:0}
 @media(max-width:760px){.header{padding-left:20px;padding-right:14px}.header .header-cart{display:none}.menu-toggle{order:3;margin-left:auto;font-size:30px;line-height:1;padding:10px 6px}.header.open nav{top:64px;padding:18px 20px;gap:3px}.header.open nav a{width:100%;padding:14px 2px;font-size:17px;border-bottom:1px solid var(--line)}.header.open nav a:last-child{border-bottom:0}.header nav .mobile-cart-link{display:none}.header.open nav .mobile-cart-link{display:flex;align-items:center;gap:9px;font-weight:500}.mobile-cart-link i{font-size:18px}.mobile-cart-link span{margin-left:auto;display:grid;place-items:center;min-width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--paper);font-size:11px}}
+
+/* Keep the large product image filled; thumbnails keep their own cover rules. */
+.gallery .main-photo .gallery-main-lightbox img,
+.gallery .main-photo > .main-gallery-open > img,
+.gallery .product-main-swiper .gallery-main-lightbox img,
+.product-main-swiper .swiper-slide > img { object-fit:cover !important; }
