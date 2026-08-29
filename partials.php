@@ -10,7 +10,7 @@ function header_page(string $title = 'IMA PRIME'): void {
 <!doctype html>
 <html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><?=htmlspecialchars($title)?></title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="stylesheet" href="assets/vendor/swiper-bundle.min.css?v=<?=$assetVersion?>"><link rel="stylesheet" href="assets/style.css?v=<?=$assetVersion?>"></head><body>
 <div class="topbar">Hàng dựng sẵn tại xưởng — giao Hà Nội trong 2–3 ngày · Miễn phí vận chuyển & lắp đặt nội thành</div>
