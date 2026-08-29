@@ -1,10 +1,8 @@
 <?php
-/* Change these values for the local XAMPP MySQL instance. The pages still run
-   with the sample catalogue when the database has not been imported yet. */
-const DB_HOST = 'localhost';
-const DB_NAME = 'prime2026';
-const DB_USER = 'root';
-const DB_PASS = '';
+/* DB credentials come from design/.env (DB_HOST, DB_NAME, DB_USER, DB_PASS) so
+   real passwords never get committed to git. That file is gitignored — on each
+   server (local XAMPP, production) it must be created there directly, not
+   pushed. Falls back to the local XAMPP defaults when the keys are absent. */
 
 function prime_env(string $key, string $default = ''): string {
     static $vars = null;
@@ -26,8 +24,12 @@ function prime_env(string $key, string $default = ''): string {
 function db(): ?PDO {
     static $pdo = false;
     if ($pdo !== false) return $pdo;
+    $host = prime_env('DB_HOST', 'localhost');
+    $name = prime_env('DB_NAME', 'prime2026');
+    $user = prime_env('DB_USER', 'root');
+    $pass = prime_env('DB_PASS', '');
     try {
-        $pdo = new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8mb4', DB_USER, DB_PASS, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+        $pdo = new PDO('mysql:host='.$host.';dbname='.$name.';charset=utf8mb4', $user, $pass, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
     } catch (Throwable $e) { $pdo = null; }
     return $pdo;
 }
