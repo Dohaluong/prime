@@ -38,7 +38,7 @@ function product_variant_data(int $productId): array {
 }
 function product_reviews(int $productId): array {
     $pdo=db(); if(!$pdo||!$productId)return [];
-    try{$q=$pdo->prepare('SELECT * FROM product_reviews WHERE product_id=? AND status="approved" ORDER BY created_at DESC');$q->execute([$productId]);$reviews=$q->fetchAll(PDO::FETCH_ASSOC);$images=$pdo->prepare('SELECT image_url FROM product_review_images WHERE review_id=? ORDER BY sort_order,id');foreach($reviews as &$review){$images->execute([$review['id']]);$review['images']=$images->fetchAll(PDO::FETCH_COLUMN);}unset($review);return $reviews;}catch(Throwable $e){return [];}
+    try{$q=$pdo->prepare('SELECT * FROM product_reviews WHERE product_id=? AND status="approved" ORDER BY created_at DESC');$q->execute([$productId]);$reviews=$q->fetchAll(PDO::FETCH_ASSOC);$images=$pdo->prepare('SELECT image_url FROM product_review_images WHERE review_id=? ORDER BY sort_order,id');foreach($reviews as &$review){$images->execute([$review['id']]);$review['images']=array_map('prime_asset_url',$images->fetchAll(PDO::FETCH_COLUMN));}unset($review);return $reviews;}catch(Throwable $e){return [];}
 }
 function about_content(): array {
     $fallback = [
