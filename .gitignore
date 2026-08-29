@@ -2,3 +2,13 @@
 **/.DS_Store
 design/.env
 prime2026.sql
+
+# Runtime uploads belong to persistent server storage, never to a deployment.
+# Keep only the seeded product samples and directory placeholders in Git.
+/uploads/about/*
+/uploads/materials/*
+!/uploads/materials/.gitkeep
+/uploads/products/*
+!/uploads/products/.gitkeep
+!/uploads/products/prime-sample/
+!/uploads/products/prime-sample/**
