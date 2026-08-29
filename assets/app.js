@@ -1,4 +1,5 @@
 document.querySelector('.menu-toggle')?.addEventListener('click',()=>document.querySelector('.header').classList.toggle('open'));
+document.querySelectorAll('.header nav').forEach(nav=>{if(nav.querySelector('.mobile-cart-link'))return;const link=document.createElement('a');link.className='mobile-cart-link';link.href='cart.php';link.innerHTML='<i class="bi bi-bag"></i> Giỏ hàng <span data-cart-count>0</span>';nav.append(link);});
 document.querySelectorAll('[data-fabric-filters]').forEach(filters=>filters.addEventListener('click',event=>{const button=event.target.closest('[data-fabric-filter]');if(!button)return;filters.querySelectorAll('button').forEach(item=>item.classList.toggle('active',item===button));const value=button.dataset.fabricFilter;document.querySelectorAll('[data-fabric-grid] [data-fabric-material]').forEach(item=>item.hidden=value!=='all'&&item.dataset.fabricMaterial!==value)}));
 document.querySelectorAll('.catalog-layout').forEach(layout=>{
   const filter=layout.querySelector('.catalog-filter'),grid=layout.querySelector('[data-catalog-grid]');

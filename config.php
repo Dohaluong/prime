@@ -35,6 +35,17 @@ function prime_base_path(): string {
     return $base;
 }
 
+function prime_asset_url(?string $url): string {
+    $url = (string) $url;
+    if ($url === '' || preg_match('#^https?://#i', $url)) return $url;
+    // Older local records were stored with the XAMPP project prefix. Convert
+    // them at render time to the actual server base path.
+    if (str_starts_with($url, '/Prime-2/uploads/')) return prime_base_path().'/uploads/'.substr($url, strlen('/Prime-2/uploads/'));
+    if (str_starts_with($url, 'Prime-2/uploads/')) return prime_base_path().'/uploads/'.substr($url, strlen('Prime-2/uploads/'));
+    if (str_starts_with($url, '/uploads/')) return prime_base_path().$url;
+    return $url;
+}
+
 function db(): ?PDO {
     static $pdo = false;
     if ($pdo !== false) return $pdo;

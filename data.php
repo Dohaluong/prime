@@ -11,13 +11,13 @@ function products(): array {
       ['slug'=>'napoli-compact','name'=>'Sofa băng NAPOLI 1.8m','type'=>'Sofa giường mở điện','description'=>'Bản gọn cho căn hộ 1–2 phòng ngủ','price'=>13500000,'rating'=>'4.8','reviews'=>11,'image'=>'https://ima.vn/assets/uploads/media/Napoli_000326.jpg','status'=>'Giao nhanh 2-3 ngày','fast'=>1],
     ];
     $pdo = db(); if (!$pdo) return $fallback;
-    try { $rows=$pdo->query('SELECT * FROM products WHERE active=1 ORDER BY featured DESC, id')->fetchAll(PDO::FETCH_ASSOC); return $rows ?: $fallback; } catch(Throwable $e) { return $fallback; }
+    try { $rows=$pdo->query('SELECT * FROM products WHERE active=1 ORDER BY featured DESC, id')->fetchAll(PDO::FETCH_ASSOC);$images=$pdo->prepare('SELECT image_url FROM product_images WHERE product_id=? ORDER BY is_featured DESC,sort_order,id LIMIT 2');foreach($rows as &$row){$images->execute([$row['id']]);$photos=$images->fetchAll(PDO::FETCH_COLUMN);$row['image']=prime_asset_url($photos[0]??$row['image']??'');$row['image_secondary']=prime_asset_url($photos[1]??'');}unset($row);return $rows ?: $fallback; } catch(Throwable $e) { return $fallback; }
 }
 function product(string $slug): array { foreach(products() as $p) if($p['slug']===$slug) return $p; return products()[0]; }
 function money($n): string { return number_format((float)$n, 0, ',', '.').'đ'; }
 function product_media(int $productId, string $fallback=''): array {
     $pdo=db(); if(!$pdo || !$productId) return $fallback ? [$fallback] : [];
-    try {$q=$pdo->prepare('SELECT image_url FROM product_images WHERE product_id=? ORDER BY is_featured DESC,sort_order,id');$q->execute([$productId]);$rows=$q->fetchAll(PDO::FETCH_COLUMN);return $rows ?: ($fallback?[$fallback]:[]);}catch(Throwable $e){return $fallback?[$fallback]:[];}
+    try {$q=$pdo->prepare('SELECT image_url FROM product_images WHERE product_id=? ORDER BY is_featured DESC,sort_order,id');$q->execute([$productId]);$rows=array_map('prime_asset_url',$q->fetchAll(PDO::FETCH_COLUMN));return $rows ?: ($fallback?[$fallback]:[]);}catch(Throwable $e){return $fallback?[$fallback]:[];}
 }
 function product_variant_data(int $productId): array {
     $fallback=['sizes'=>[['id'=>0,'name'=>'1.8m','price'=>14800000],['id'=>0,'name'=>'2.1m','price'=>24400000],['id'=>0,'name'=>'2.6m','price'=>29900000]],'materials'=>[['id'=>0,'name'=>'Vải bố kháng nước','coefficient'=>1]],'colors'=>[],'prices'=>[]];
@@ -26,7 +26,7 @@ function product_variant_data(int $productId): array {
       $q=$pdo->prepare('SELECT id,name FROM product_size_options WHERE product_id=? ORDER BY sort_order,id');$q->execute([$productId]);$sizes=$q->fetchAll(PDO::FETCH_ASSOC);
       $q=$pdo->prepare('SELECT m.id,m.name,m.coefficient,r.color_ids_json FROM product_variant_materials r JOIN materials m ON m.id=r.material_id WHERE r.product_id=? ORDER BY m.name');$q->execute([$productId]);$materials=$q->fetchAll(PDO::FETCH_ASSOC);
       if(!$sizes || !$materials) return $fallback;
-      $ids=implode(',',array_map('intval',array_column($materials,'id')));$colors=$pdo->query("SELECT id,material_id,code,image,hex_code FROM material_colors WHERE material_id IN ($ids) ORDER BY id")->fetchAll(PDO::FETCH_ASSOC);foreach($materials as &$material){$raw=$material['color_ids_json'];if($raw!==null){$selected=array_map('intval',json_decode($raw,true)?:[]);$colors=array_values(array_filter($colors,fn($color)=>$color['material_id']!=$material['id']||in_array((int)$color['id'],$selected,true)));}$material['has_color_rule']=$raw!==null;unset($material['color_ids_json']);}unset($material);
+      $ids=implode(',',array_map('intval',array_column($materials,'id')));$colors=$pdo->query("SELECT id,material_id,code,image,hex_code FROM material_colors WHERE material_id IN ($ids) ORDER BY id")->fetchAll(PDO::FETCH_ASSOC);foreach($colors as &$color)$color['image']=prime_asset_url($color['image']??'');unset($color);foreach($materials as &$material){$raw=$material['color_ids_json'];if($raw!==null){$selected=array_map('intval',json_decode($raw,true)?:[]);$colors=array_values(array_filter($colors,fn($color)=>$color['material_id']!=$material['id']||in_array((int)$color['id'],$selected,true)));}$material['has_color_rule']=$raw!==null;unset($material['color_ids_json']);}unset($material);
       $q=$pdo->prepare('SELECT material_id,size_option_id,price FROM product_variant_prices WHERE product_id=?');$q->execute([$productId]);$prices=[];foreach($q->fetchAll(PDO::FETCH_ASSOC) as $row)$prices[$row['material_id'].'_'.$row['size_option_id']]=(float)$row['price'];
       return compact('sizes','materials','colors','prices');
     } catch(Throwable $e) { return $fallback; }
