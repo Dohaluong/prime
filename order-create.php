@@ -1,6 +1,11 @@
 <?php
 require_once __DIR__.'/config.php';
 header('Content-Type: application/json; charset=utf-8');
+if (!prime_ordering_open()) {
+    http_response_code(503);
+    echo json_encode(['ok'=>false,'error'=>'IMA PRIME đang tạm ngưng nhận đơn trực tuyến.']);
+    exit;
+}
 try {
     $payload=json_decode(file_get_contents('php://input'),true,512,JSON_THROW_ON_ERROR);
     $items=$payload['items']??[]; $customer=$payload['customer']??[];

@@ -21,6 +21,11 @@ function prime_env(string $key, string $default = ''): string {
     return $vars[$key] ?? $default;
 }
 
+/** Toggle online ordering and Zalo order CTAs without changing product content. */
+function prime_ordering_open(): bool {
+    return false;
+}
+
 function prime_base_path(): string {
     static $base = null;
     if ($base === null) {
