@@ -13,7 +13,7 @@ function header_page(string $title = 'IMA PRIME'): void {
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="stylesheet" href="assets/vendor/swiper-bundle.min.css?v=<?=$assetVersion?>"><link rel="stylesheet" href="assets/style.css?v=<?=$assetVersion?>"></head><body>
-<div class="topbar">Hàng dựng sẵn tại xưởng — giao Hà Nội trong 2–3 ngày · Miễn phí vận chuyển & lắp đặt nội thành</div>
+<div class="topbar" aria-label="Thông tin dịch vụ"><span data-topbar-message>Giao 2–3 ngày tại Hà Nội · Miễn phí vận chuyển & lắp đặt nội thành</span></div>
 <header class="header"><a class="brand" href="index.php">IMA <em>PRIME</em></a><button class="menu-toggle" aria-label="Mở menu">☰</button><nav><a href="category.php">Sản phẩm</a><a href="fabric-library.php">Thư viện vải</a><a href="about.php">Về chúng tôi</a></nav><a class="zalo small" href="https://zalo.me/0934430111">Nhắn Zalo</a><button class="header-cart" type="button" data-cart-open aria-label="Giỏ hàng"><i class="bi bi-bag"></i><span data-cart-count>0</span></button></header><div class="cart-modal" data-cart-modal hidden><div class="cart-modal-backdrop" data-cart-close></div><section class="cart-modal-panel" role="dialog" aria-modal="true" aria-label="Giỏ hàng"><button class="cart-modal-close" data-cart-close aria-label="Đóng">×</button><div class="eyebrow">Giỏ hàng</div><h2>Sản phẩm bạn đang chọn</h2><div data-cart-preview></div><a class="button" href="cart.php">Đi đến giỏ hàng</a></section></div>
 <?php }
 
